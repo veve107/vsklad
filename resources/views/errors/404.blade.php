@@ -45,7 +45,7 @@
     <div class="wd-lg-70p wd-xl-50p tx-center pd-x-40">
         <h1 class="tx-100 tx-xs-140 tx-normal tx-white mg-b-0">404!</h1>
         <h5 class="tx-xs-24 tx-normal tx-info mg-b-30 lh-5">Stránka ktorú ste hľadali neexistuje.</h5>
-        <p class="tx-16 mg-b-30 tx-white-5">Stránka, ktorú ste sa pokúsili navštíviť bola presunutá alebo nikdy neexistovala. Choďte radšej <a href="{{route('admin.home')}}">domov</a></p>
+        <p class="tx-16 mg-b-30 tx-white-5">Stránka, ktorú ste sa pokúsili navštíviť bola presunutá alebo nikdy neexistovala. Choďte radšej <a href="{{route('admin.home')}}">domov</a>.</p>
     </div>
 </div><!-- ht-100v -->
 

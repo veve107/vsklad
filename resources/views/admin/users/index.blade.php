@@ -1,7 +1,10 @@
 @extends('layouts.admin')
 
+@push('styles')
+    <link href="{{asset('backend/lib/datatables/jquery.dataTables.css')}}" rel="stylesheet">
+    <link href="{{asset('backend/lib/select2/css/select2.min.css')}}" rel="stylesheet">
+@endpush
 @section('admin_content')
-
     <div class="sl-mainpanel">
         <nav class="breadcrumb sl-breadcrumb">
             <a class="breadcrumb-item" href="index.html">Starlight</a>
@@ -13,7 +16,16 @@
             <div class="sl-page-title">
                 <h5>Používatelia</h5>
             </div><!-- sl-page-title -->
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{$error}}</li>
+                        @endforeach
+                    </ul>
+                </div>
 
+            @endif
             <div class="card pd-20 pd-sm-40">
                 <h6 class="card-body-title">Zoznam používateľov <a href="" class="btn btn-sm btn-warning"
                                                                    style="float: right"
@@ -29,6 +41,7 @@
                             <th class="wd-15p">Meno používateľa</th>
                             <th class="wd-15p">Rola</th>
                             <th class="wd-15p">Pozícia</th>
+                            <th class="wd-15p">Oddelenie</th>
                             <th class="wd-20p">Akcia</th>
                         </tr>
                         </thead>
@@ -39,8 +52,15 @@
                                 <td>{{$user->name}}</td>
                                 <td>{{$user->role->name}}</td>
                                 <td>{{$user->position->name}}</td>
-                                <td><a href="{{url('edit/category/'.$user->id)}}" class="btn btn-sm btn-info">Editovať</a> ||
-                                    <a href="{{url('delete/category/'.$user->id)}}"
+                                @if($user->department != null)
+                                    <td>{{$user->department->name}}</td>
+                                @else
+                                    <td>Nenastavené</td>
+                                @endif
+
+                                <td><a href="{{url('edit/user/'.$user->id)}}" class="btn btn-sm btn-info">Editovať</a>
+                                    ||
+                                    <a href="{{url('delete/user/'.$user->id)}}"
                                        class="btn btn-sm btn-danger"
                                        id="delete">Zmazať</a></td>
                             </tr>
@@ -64,18 +84,7 @@
                     </button>
                 </div>
 
-                @if($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach($errors->all() as $error)
-                                <li>{{$error}}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-
-                @endif
-
-                <form method="post" action="{{route('store.user')}}">
+                <form method="post" action="{{route('user.store')}}">
                     @csrf
                     <div class="modal-body pd-20">
                         <div class="form-group">
@@ -104,6 +113,14 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="position_id">Oddelenie</label>
+                            <select name="department_id" id="department_id" class="form-control">
+                                @foreach($departments as $department)
+                                    <option value="{{$department->id}}">{{$department->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-info pd-x-20">Pridať</button>
@@ -114,3 +131,24 @@
         </div><!-- modal -->
     </div>
 @endsection
+@push('scripts')
+    <script>
+        $(function () {
+            $('#datatable1').DataTable({
+                responsive: true,
+                language: {
+                    url: '{{asset('backend/lib/datatables/Slovak.json')}}'
+                }
+            });
+            $('#datatable2').DataTable({
+                responsive: true,
+                language: {
+                    url: '{{asset('backend/lib/datatables/Slovak.json')}}'
+                }
+            });
+            // Select2
+            $('.dataTables_length select').select2({minimumResultsForSearch: Infinity});
+        })
+    </script>
+
+@endpush

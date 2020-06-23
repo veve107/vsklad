@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Department;
 use App\Http\Controllers\Controller;
 use App\Models\Position;
 use App\Models\Role;
@@ -17,7 +18,8 @@ class AdminController extends Controller
         $users = User::all();
         $positions = Position::all();
         $roles = Role::all();
-        return view('admin.users.index', compact('users', 'positions', 'roles'));
+        $departments = Department::all();
+        return view('admin.users.index', compact('users', 'positions', 'roles', 'departments'));
     }
 
     public function roles(){
@@ -59,8 +61,32 @@ class AdminController extends Controller
         );
         return Redirect()->back()->with($notification);
     }
-
+    //todo
     public function deleteRole($id){
+
+    }
+
+    public function departments(){
+        $departments = Department::all();
+        return view('admin.others.departments', compact('departments'));
+    }
+
+    public function storeDepartment(Request $request){
+        $this->validate($request, [
+            'name' => 'required|unique:positions|max:50',
+        ]);
+
+        $role = new Department();
+        $role->name = $request->name;
+        $role->save();
+        $notification = array(
+            'message' => 'Oddelenie úspešne pridané.',
+            'alert-type' => 'success',
+        );
+        return Redirect()->back()->with($notification);
+    }
+    //todo
+    public function deleteDepartment($id){
 
     }
 

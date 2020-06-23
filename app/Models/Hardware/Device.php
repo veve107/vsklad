@@ -2,6 +2,7 @@
 
 namespace App\Models\Hardware;
 
+use App\Models\Request;
 use Illuminate\Database\Eloquent\Model;
 
 class Device extends Model
@@ -20,5 +21,9 @@ class Device extends Model
 
     public function type(){
         return $this->belongsTo('App\Models\Hardware\Type');
+    }
+
+    public function requests(){
+        return $this->belongsToMany(Request::class);
     }
 }

@@ -1,5 +1,10 @@
 @extends('layouts.admin')
 
+@push('styles')
+    <link href="{{asset('backend/lib/datatables/jquery.dataTables.css')}}" rel="stylesheet">
+    <link href="{{asset('backend/lib/select2/css/select2.min.css')}}" rel="stylesheet">
+@endpush
+
 @section('admin_content')
 
     <div class="sl-mainpanel">
@@ -35,7 +40,7 @@
                             <tr>
                                 <td>{{$type->id}}</td>
                                 <td>{{$type->name}}</td>
-                                <td><a href="{{url('delete/position/'.$type->id)}}" class="btn btn-sm btn-danger" id="delete">Zmazať</a></td>
+                                <td><a href="{{route('delete.type', $type->id)}}" class="btn btn-sm btn-danger" id="delete">Zmazať</a></td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -86,3 +91,24 @@
         </div><!-- modal -->
     </div>
 @endsection
+@push('scripts')
+    <script>
+        $(function () {
+            $('#datatable1').DataTable({
+                responsive: true,
+                language: {
+                    url: '{{asset('backend/lib/datatables/Slovak.json')}}'
+                }
+            });
+            $('#datatable2').DataTable({
+                responsive: true,
+                language: {
+                    url: '{{asset('backend/lib/datatables/Slovak.json')}}'
+                }
+            });
+            // Select2
+            $('.dataTables_length select').select2({minimumResultsForSearch: Infinity});
+        })
+    </script>
+
+@endpush

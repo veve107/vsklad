@@ -8,16 +8,18 @@ use App\Models\Hardware\Device;
 use App\Models\Hardware\Order;
 use App\Models\Hardware\Type;
 use Illuminate\Http\Request;
+use Symfony\Component\VarDumper\VarDumper;
 
 class HardwareController extends Controller
 {
     public function hardware()
     {
-        $devices = Device::all();
+        $devices_available = Device::all()->where('status', '=', '1');
+        $devices_unavailable = Device::all()->where('status', '=', '2');
         $brands = Brand::all();
         $types = Type::all();
         $orders = Order::all();
-        return view('admin.hardware.hardware', compact('devices', 'brands', 'types', 'orders'));
+        return view('admin.hardware.hardware', compact('devices_available', 'devices_unavailable', 'brands', 'types', 'orders'));
     }
 
     public function addHardware()
@@ -28,14 +30,15 @@ class HardwareController extends Controller
         return view('admin.hardware.add', compact('brands', 'types', 'orders'));
     }
 
-    public function storeHardware(Request $request){
+    public function storeHardware(Request $request)
+    {
         $this->validate($request, [
             'brand_id' => 'required',
             'name' => 'required|max:55',
             'type_id' => 'required',
             'order_id' => 'required',
             'serial_number' => 'required|max:55',
-            'inventory_number' => 'required|unique:devices|max:55',
+            'inventory_number' => 'required|unique:devices|numeric',
         ]);
         $device = new Device($request->all());
         $device->save();
@@ -47,9 +50,10 @@ class HardwareController extends Controller
         return Redirect()->back()->with($notification);
     }
 
-    public function storeType(Request $request){
+    public function storeType(Request $request)
+    {
         $this->validate($request, [
-           'name' => 'required',
+            'name' => 'required',
         ]);
         $type = new Type();
         $type->name = $request->name;
@@ -62,18 +66,52 @@ class HardwareController extends Controller
     }
 
 
-    public function types(){
+    public function types()
+    {
         $types = Type::all();
         return view('admin.hardware.types', compact('types'));
     }
-    public function orders(){
+
+    public function deleteType($id){
+        Type::find($id)->delete();
+    }
+    public function orders()
+    {
         $orders = Order::all();
         return view('admin.hardware.orders', compact('orders'));
     }
-    public function addOrder(){
+
+    public function addOrder()
+    {
         return view('admin.hardware.add_order');
     }
 
+    public function brands()
+    {
+        $brands = Brand::all();
+        return view('admin.hardware.brands', compact('brands'));
+    }
 
+    public function storeBrand(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
+        $brand = new Brand();
+        $brand->name = $request->name;
+        $brand->save();
+        $notification = array(
+            'message' => 'Značka úspešne pridaná.',
+            'alert-type' => 'success',
+        );
+        return Redirect()->back()->with($notification);
+    }
+
+    //todo
+    public function storeOrder(Request $request){
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
+    }
 
 }

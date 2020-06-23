@@ -34,15 +34,12 @@
     <link href="{{asset('backend/lib/font-awesome/css/font-awesome.css')}}" rel="stylesheet">
     <link href="{{asset('backend/lib/Ionicons/css/ionicons.css')}}" rel="stylesheet">
     <link href="{{asset('backend/lib/perfect-scrollbar/css/perfect-scrollbar.css')}}" rel="stylesheet">
-    <link href="{{asset('backend/lib/rickshaw/rickshaw.min.css')}}" rel="stylesheet">
-    <link rel="stylesheet" type="text/css"
-          href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css">
-
+    <link href="{{asset('backend/lib/toastr.js/toastr.min.css')}}" rel="stylesheet">
     <link href="{{asset('backend/lib/highlightjs/github.css')}}" rel="stylesheet">
-    <link href="{{asset('backend/lib/datatables/jquery.dataTables.css')}}" rel="stylesheet">
-    <link href="{{asset('backend/lib/select2/css/select2.min.css')}}" rel="stylesheet">
 
-    <!-- Starlight CSS -->
+@stack('styles')
+
+<!-- Starlight CSS -->
     <link rel="stylesheet" href="{{asset('backend/css/starlight.css')}}">
 </head>
 
@@ -52,16 +49,16 @@
 
 @else
     <!-- ########## START: LEFT PANEL ########## -->
-    <div class="sl-logo"><a href=""><i class="icon ion-android-star-outline"></i> Viruálny sklad</a></div>
+    <div class="sl-logo"><a href=""><i class="icon ion-android-star-outline"></i> Virtuálny sklad</a></div>
     <div class="sl-sideleft">
         <div class="sl-sideleft-menu">
-            <a href="{{url('admin/home')}}" class="sl-menu-link active">
+            <a href="{{url('admin/home')}}" class="sl-menu-link {{request()->routeIs('admin.home') ? 'active' : '' }}">
                 <div class="sl-menu-item">
                     <i class="menu-item-icon icon ion-ios-home-outline tx-22"></i>
                     <span class="menu-item-label">Dashboard</span>
                 </div><!-- menu-item -->
             </a><!-- sl-menu-link -->
-            <a href="#" class="sl-menu-link">
+            <a href="#" class="sl-menu-link {{request()->routeIs('admin.positions*') ? 'active' : '' }}">
                 <div class="sl-menu-item">
                     <i class="menu-item-icon ion-ios-people-outline tx-20"></i>
                     <span class="menu-item-label">Používatelia</span>
@@ -69,11 +66,13 @@
                 </div><!-- menu-item -->
             </a><!-- sl-menu-link -->
             <ul class="sl-menu-sub nav flex-column">
-                <li class="nav-item"><a href="{{route('admin.users')}}" class="nav-link">Používatelia</a></li>
-                <li class="nav-item"><a href="{{route('admin.roles')}}" class="nav-link">Role</a></li>
+                <li class="nav-item"><a href="{{route('admin.positions.users')}}" class="nav-link">Používatelia</a></li>
+                <li class="nav-item"><a href="{{route('admin.positions.roles')}}" class="nav-link">Role</a></li>
                 <li class="nav-item"><a href="{{route('admin.positions')}}" class="nav-link">Pozície</a></li>
+                <li class="nav-item"><a href="{{route('admin.positions.departments')}}" class="nav-link">Oddelenia</a>
+                </li>
             </ul>
-            <a href="#" class="sl-menu-link">
+            <a href="#" class="sl-menu-link {{request()->routeIs('request*') ? 'active' : '' }}">
                 <div class="sl-menu-item">
                     <i class="menu-item-icon ion-stats-bars tx-20"></i>
                     <span class="menu-item-label">Žiadosti</span>
@@ -81,9 +80,10 @@
                 </div><!-- menu-item -->
             </a><!-- sl-menu-link -->
             <ul class="sl-menu-sub nav flex-column">
-                <li class="nav-item"><a href="{{route('request')}}" class="nav-link">Žiadosť o techniku</a></li>
+                <li class="nav-item"><a href="{{route('request.add')}}" class="nav-link">Žiadosť o techniku</a></li>
+                <li class="nav-item"><a href="{{route('request.index')}}" class="nav-link">Zoznam žiadostí</a></li>
             </ul>
-            <a href="#" class="sl-menu-link">
+            <a href="#" class="sl-menu-link {{request()->routeIs('hardware*') ? 'active' : '' }}">
                 <div class="sl-menu-item">
                     <i class="menu-item-icon ion-android-laptop tx-20"></i>
                     <span class="menu-item-label">Technika</span>
@@ -91,43 +91,12 @@
                 </div><!-- menu-item -->
             </a><!-- sl-menu-link -->
             <ul class="sl-menu-sub nav flex-column">
-                <li class="nav-item"><a href="{{route('hardware')}}" class="nav-link">Dostupná technika</a></li>
-                <li class="nav-item"><a href="{{route('add.hardware')}}" class="nav-link">Pridať techniku</a></li>
-                <li class="nav-item"><a href="{{route('types')}}" class="nav-link">Typy techniky</a></li>
-                <li class="nav-item"><a href="{{route('orders')}}" class="nav-link">Objednávky</a></li>
+                <li class="nav-item"><a href="{{route('hardware.index')}}" class="nav-link">Dostupná technika</a></li>
+                <li class="nav-item"><a href="{{route('hardware.add')}}" class="nav-link">Pridať techniku</a></li>
+                <li class="nav-item"><a href="{{route('hardware.types')}}" class="nav-link">Typy techniky</a></li>
+                <li class="nav-item"><a href="{{route('hardware.orders')}}" class="nav-link">Objednávky</a></li>
+                <li class="nav-item"><a href="{{route('hardware.brands')}}" class="nav-link">Značky</a></li>
             </ul>
-            <a href="#" class="sl-menu-link">
-                <div class="sl-menu-item">
-                    <i class="menu-item-icon icon ion-ios-gear-outline tx-24"></i>
-                    <span class="menu-item-label">Coupons</span>
-                    <i class="menu-item-arrow fa fa-angle-down"></i>
-                </div><!-- menu-item -->
-            </a><!-- sl-menu-link -->
-            <ul class="sl-menu-sub nav flex-column">
-                <li class="nav-item"><a href="" class="nav-link">Coupon</a></li>
-            </ul>
-            <a href="#" class="sl-menu-link">
-                <div class="sl-menu-item">
-                    <i class="menu-item-icon icon ion-ios-filing-outline tx-24"></i>
-                    <span class="menu-item-label">Others</span>
-                    <i class="menu-item-arrow fa fa-angle-down"></i>
-                </div><!-- menu-item -->
-            </a><!-- sl-menu-link -->
-            <ul class="sl-menu-sub nav flex-column">
-                <li class="nav-item"><a href="" class="nav-link">Newsletter</a></li>
-            </ul>
-            <a href="#" class="sl-menu-link">
-                <div class="sl-menu-item">
-                    <i class="menu-item-icon icon ion-ios-bookmarks-outline tx-20"></i>
-                    <span class="menu-item-label">Products</span>
-                    <i class="menu-item-arrow fa fa-angle-down"></i>
-                </div><!-- menu-item -->
-            </a><!-- sl-menu-link -->
-            <ul class="sl-menu-sub nav flex-column">
-                <li class="nav-item"><a href="table-basic.html" class="nav-link">Add Product</a></li>
-                <li class="nav-item"><a href="table-datatable.html" class="nav-link">All Products</a></li>
-            </ul>
-
         </div><!-- sl-sideleft-menu -->
 
         <br>
@@ -140,7 +109,7 @@
             <div class="navicon-left hidden-md-down"><a id="btnLeftMenu" href=""><i class="icon ion-navicon-round"></i></a>
             </div>
             <div class="navicon-left hidden-lg-up"><a id="btnLeftMenuMobile" href=""><i
-                        class="icon ion-navicon-round"></i></a>
+                            class="icon ion-navicon-round"></i></a>
             </div>
         </div><!-- sl-header-left -->
         <div class="sl-header-right">
@@ -152,11 +121,11 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-header wd-200">
                         <ul class="list-unstyled user-profile-nav">
-                            <li><a href=""><i class="icon ion-ios-person-outline"></i> Edit Profile</a></li>
-                            <li><a href=""><i class="icon ion-ios-gear-outline"></i>
-                                    Settings</a></li>
+                            <li><a href="{{route('user.profile', \Illuminate\Support\Facades\Auth::user()->id)}}"><i
+                                            class="icon ion-ios-person-outline"></i> Môj Profil</a></li>
                             <li><a href="{{route('logout')}}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();"><i class="icon ion-power"></i> Sign Out</a></li>
+                                                     document.getElementById('logout-form').submit();"><i
+                                            class="icon ion-power"></i> Sign Out</a></li>
 
                         </ul>
                     </div><!-- dropdown-menu -->
@@ -290,7 +259,7 @@
                             <img src="{{asset('backend/img/img10.jpg')}}" class="wd-40 rounded-circle" alt="">
                             <div class="media-body">
                                 <p class="tx-13 mg-b-0 tx-gray-700">20+ new items added are for sale in your <strong
-                                        class="tx-medium tx-gray-800">Sale Group</strong></p>
+                                            class="tx-medium tx-gray-800">Sale Group</strong></p>
                                 <span class="tx-12">October 01, 2017 10:20pm</span>
                             </div>
                         </div><!-- media -->
@@ -301,7 +270,7 @@
                             <div class="media-body">
                                 <p class="tx-13 mg-b-0 tx-gray-700"><strong class="tx-medium tx-gray-800">Julius
                                         Erving</strong> wants to connect with you on your conversation with <strong
-                                        class="tx-medium tx-gray-800">Ronnie Mara</strong></p>
+                                            class="tx-medium tx-gray-800">Ronnie Mara</strong></p>
                                 <span class="tx-12">October 01, 2017 6:08pm</span>
                             </div>
                         </div><!-- media -->
@@ -321,7 +290,7 @@
                             <img src="{{asset('backend/img/img10.jpg')}}" class="wd-40 rounded-circle" alt="">
                             <div class="media-body">
                                 <p class="tx-13 mg-b-0 tx-gray-700">10+ new items added are for sale in your <strong
-                                        class="tx-medium tx-gray-800">Sale Group</strong></p>
+                                            class="tx-medium tx-gray-800">Sale Group</strong></p>
                                 <span class="tx-12">September 28, 2017 11:30pm</span>
                             </div>
                         </div><!-- media -->
@@ -344,7 +313,7 @@
                             <div class="media-body">
                                 <p class="tx-13 mg-b-0 tx-gray-700"><strong class="tx-medium tx-gray-800">Julius
                                         Erving</strong> wants to connect with you on your conversation with <strong
-                                        class="tx-medium tx-gray-800">Ronnie Mara</strong></p>
+                                            class="tx-medium tx-gray-800">Ronnie Mara</strong></p>
                                 <span class="tx-12">September 23, 2017 9:19pm</span>
                             </div>
                         </div><!-- media -->
@@ -370,38 +339,21 @@
 <script src="{{asset('backend/lib/datatables-responsive/dataTables.responsive.js')}}"></script>
 <script src="{{asset('backend/lib/select2/js/select2.min.js')}}"></script>
 
-<script>
-    $(function () {
-        $('#datatable1').DataTable({
-            responsive: true,
-            language: {
-                url:'{{asset('backend/lib/datatables/Slovak.json')}}'
-            }
-        });
 
-        // Select2
-        $('.dataTables_length select').select2({minimumResultsForSearch: Infinity});
-
-    })
-</script>
+@stack('scripts')
 
 <script src="{{asset('backend/lib/jquery.sparkline.bower/jquery.sparkline.min.js')}}"></script>
 <script src="{{asset('backend/lib/d3/d3.js')}}"></script>
 <script src="{{asset('backend/lib/rickshaw/rickshaw.min.js')}}"></script>
 <script src="{{asset('backend/lib/chart.js/Chart.js')}}"></script>
-<script src="{{asset('backend/lib/Flot/jquery.flot.js')}}"></script>
-<script src="{{asset('backend/lib/Flot/jquery.flot.pie.js')}}"></script>
-<script src="{{asset('backend/lib/Flot/jquery.flot.resize.js')}}"></script>
-<script src="{{asset('backend/lib/flot-spline/jquery.flot.spline.js')}}"></script>
+<script src="{{asset('backend/lib/toastr.js/toastr.min.js')}}"></script>
 
 <script src="{{asset('backend/js/starlight.js')}}"></script>
 <script src="{{asset('backend/js/ResizeSensor.js')}}"></script>
 <script src="{{asset('backend/js/dashboard.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-<script src="{{ asset('https://unpkg.com/sweetalert/dist/sweetalert.min.js')}}"></script>
-
+<script src="{{asset('https://unpkg.com/sweetalert/dist/sweetalert.min.js')}}"></script>
 <script>
-        @if(Session::has('message'))
+            @if(Session::has('message'))
     var type = "{{Session::get('alert-type','info')}}"
     switch (type) {
         case 'info':
@@ -419,14 +371,13 @@
     }
     @endif
 </script>
-
 <script>
     $(document).on("click", "#delete", function (e) {
         e.preventDefault();
         var link = $(this).attr("href");
         swal({
-            title: "Are you Want to delete?",
-            text: "Once Delete, This will be Permanently Delete!",
+            title: "Naozaj chcete vymazať?",
+            text: "Pokiaľ kliknete na áno, požiadavka na zmazanie bude nevratná!",
             icon: "warning",
             buttons: true,
             dangerMode: true,
@@ -435,20 +386,10 @@
                 if (willDelete) {
                     window.location.href = link;
                 } else {
-                    swal("Safe Data!");
+                    swal("Pre istotu!");
                 }
             });
     });
-</script>
-
-<script>
-
-    $(document).ready(function() {
-        $("#select2insidemodal").select2({
-            dropdownParent: $("#modaldemo3")
-        });
-    });
-
 </script>
 </body>
 </html>

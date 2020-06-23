@@ -30,24 +30,30 @@
                         <div class="row mg-b-25">
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label class="form-control-label">Model: <span class="tx-danger">*</span></label>
-                                    <input class="form-control" type="text" name="name" placeholder="Zadaj model">
+                                    <label class="form-control-label">Objednávka: <span
+                                                class="tx-danger">*</span></label>
+                                    <input class="form-control" type="text" name="name"
+                                           placeholder="Zadaj číslo objednávky">
                                 </div>
                             </div><!-- col-4 -->
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label class="form-control-label">Dátum prijatia: <span class="tx-danger">*</span></label>
+                                    <label class="form-control-label">Dátum prijatia: <span
+                                                class="tx-danger">*</span></label>
                                     <div class="input-group">
-                                        <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
+                                        <span class="input-group-addon"><i
+                                                    class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
                                         <input type="text" class="form-control fc-datepicker" placeholder="MM/DD/YYYY">
                                     </div>
                                 </div>
                             </div><!-- col-4 -->
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label class="form-control-label">Dátum konca záruky: <span class="tx-danger">*</span></label>
+                                    <label class="form-control-label">Dátum konca záruky: <span
+                                                class="tx-danger">*</span></label>
                                     <div class="input-group">
-                                        <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
+                                        <span class="input-group-addon"><i
+                                                    class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
                                         <input type="text" class="form-control fc-datepicker" placeholder="MM/DD/YYYY">
                                     </div>
                                 </div>
@@ -55,29 +61,19 @@
                         </div><!-- row -->
 
                         <div class="form-layout-footer">
-                            <button class="btn btn-info mg-r-5">Pridaj zariadenie</button>
+                            <button type="submit" class="btn btn-info mg-r-5">Pridaj objednávku</button>
                         </div><!-- form-layout-footer -->
                     </div><!-- form-layout -->
-
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-info pd-x-20">Pridať</button>
-                        <button type="button" class="btn btn-secondary pd-x-20" data-dismiss="modal">Zavrieť</button>
-                    </div>
                 </form>
             </div><!-- card -->
         </div>
     </div><!-- sl-mainpanel -->
-
-    <script src="{{asset('backend/lib/jquery/jquery.js')}}"></script>
-    <script src="{{asset('backend/lib/jquery-ui/jquery-ui.js')}}"></script>
-
+@endsection
+@push('scripts')
     <script>
-        // Datepicker
-
         $('.fc-datepicker').datepicker({
             showOtherMonths: true,
             selectOtherMonths: true
         });
     </script>
-
-@endsection
+@endpush

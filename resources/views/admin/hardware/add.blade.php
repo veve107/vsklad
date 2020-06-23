@@ -1,5 +1,7 @@
 @extends('layouts.admin')
-
+@push('styles')
+    <link href="{{asset('backend/lib/select2/css/select2.min.css')}}" rel="stylesheet">
+@endpush
 @section('admin_content')
 
     <div class="sl-mainpanel">
@@ -7,12 +9,21 @@
             <a class="breadcrumb-item" href="index.html">Domov</a>
             <span class="breadcrumb-item active">Pridanie zariadenia</span>
         </nav>
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{$error}}</li>
+                    @endforeach
+                </ul>
+            </div>
 
+        @endif
         <div class="sl-pagebody">
             <div class="card pd-20 pd-sm-40">
                 <h6 class="card-body-title">Pridanie zariadenia</h6>
                 <p class="mg-b-20 mg-sm-b-30">Formulár pre pridanie zariadenia</p>
-                <form action="{{route('store.hardware')}}" method="post">
+                <form action="{{route('hardware.store')}}" method="post">
                     @csrf
                     <div class="form-layout">
                         <div class="row mg-b-25">
