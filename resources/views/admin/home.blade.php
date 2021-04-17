@@ -54,27 +54,6 @@
                     </div><!-- card -->
                 </div><!-- col-3 -->
                 <div class="col-sm-6 col-xl-3 mg-t-20 mg-xl-t-0">
-                    <div class="card pd-20 bg-purple">
-                        <div class="d-flex justify-content-between align-items-center mg-b-10">
-                            <h6 class="tx-11 tx-uppercase mg-b-0 tx-spacing-1 tx-white">This Month's Sales</h6>
-                        </div><!-- card-header -->
-                        <div class="d-flex align-items-center justify-content-between">
-                            <span class="sparkline2">5,3,9,6,5,9,7,3,5,2</span>
-                            <h3 class="mg-b-0 tx-white tx-lato tx-bold">$11,908</h3>
-                        </div><!-- card-body -->
-                        <div class="d-flex align-items-center justify-content-between mg-t-15 bd-t bd-white-2 pd-t-10">
-                            <div>
-                                <span class="tx-11 tx-white-6">Gross Sales</span>
-                                <h6 class="tx-white mg-b-0">$2,210</h6>
-                            </div>
-                            <div>
-                                <span class="tx-11 tx-white-6">Tax Return</span>
-                                <h6 class="tx-white mg-b-0">$320</h6>
-                            </div>
-                        </div><!-- -->
-                    </div><!-- card -->
-                </div><!-- col-3 -->
-                <div class="col-sm-6 col-xl-3 mg-t-20 mg-xl-t-0">
                     <div class="card pd-20 pd-sm-25">
                         <h6 class="card-body-title">Pie Chart</h6>
                         <p class="mg-b-20 mg-sm-b-30">Labels can be hidden if the slice is less than a given percentage
@@ -96,8 +75,8 @@
     <script>
         $(function () {
             var piedata = [
-                {label: "Dostupná", data: [[1, 10]], color: '#677489'},
-                {label: "Vydaná", data: [[1, 30]], color: '#218bc2'},
+                {label: "Dostupná technika", data: [[1, {{\App\Models\Hardware\Device::all()->where('status', '=', '1')->count()}}]], color: '#677489'},
+                {label: "Vydaná technika", data: [[1, {{\App\Models\Hardware\Device::all()->where('status', '=', '2')->count()}}]], color: '#218bc2'},
             ];
 
             $.plot('#flotPie2', piedata, {
@@ -105,7 +84,7 @@
                     pie: {
                         show: true,
                         radius: 1,
-                        innerRadius: 0.5,
+                        innerRadius: 0.2,
                         label: {
                             show: true,
                             radius: 2 / 3,

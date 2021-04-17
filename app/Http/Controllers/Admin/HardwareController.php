@@ -7,6 +7,7 @@ use App\Models\Hardware\Brand;
 use App\Models\Hardware\Device;
 use App\Models\Hardware\Order;
 use App\Models\Hardware\Type;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Symfony\Component\VarDumper\VarDumper;
 
@@ -110,8 +111,20 @@ class HardwareController extends Controller
     //todo
     public function storeOrder(Request $request){
         $this->validate($request, [
-            'name' => 'required',
+            'order_number' => 'required',
+            'delivery_date' => 'required',
         ]);
-    }
 
+        $order = new Order();
+        $order->order_number = $request->order_number;
+        $order->delivery_date = Carbon::createFromFormat('m/d/Y', $request->delivery_date);
+        $order->end_of_warranty = $order->delivery_date->addYears(2);
+        $order->touch();
+        $order->save();
+        $notification = array(
+            'message' => 'Objednávka úspešne pridaná.',
+            'alert-type' => 'success',
+        );
+        return Redirect()->back()->with($notification);
+    }
 }

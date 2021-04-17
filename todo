@@ -1,0 +1,18 @@
+- Edit/Delete Role
+- Delete User - ako sa budu spravat requesty
+- Edit/Delete Pozicie
+- Edit/Delete Oddelenia
+- Edit Request
+- Delete Typ Hardware
+- Delete Objednavky
+- Delete Znacky
+- Rozdelenie pristupov pre role (Admin vs ostatni)
+- BreadCrumbs
+- Notifikacie
+- Pri pocitaci sa automaticky prida aj monitor, klavesnica, mys
+- Pri notebooku sa automaticky prida aj mys
+- Mys aj klavesnica nie su povinne SN a IN
+- Pri spracovani requestu nech sa zobrazia notebooky/pc na ktore ma zamestnanec pravo
+- Devices su vo many to many vztahu s requestami, treba prerobit na many to one
+- Order pridanie dorobit
+- Role pridanie dorobit

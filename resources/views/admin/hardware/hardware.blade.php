@@ -68,10 +68,8 @@
                                                     <td>{{$device->serial_number}}</td>
                                                     <td>{{$device->inventory_number}}</td>
                                                     <td>{{$device->order->end_of_warranty}}</td>
-                                                    <td><a href="{{url('edit/position/'.$device->id)}}"
-                                                           class="btn btn-sm btn-info">Editovať</a> ||
-                                                        <a href="{{url('delete/position/'.$device->id)}}"
-                                                           class="btn btn-sm btn-danger"
+                                                    <td><a href="#" class="btn btn-sm btn-info">Editovať</a> ||
+                                                        <a href="#" class="btn btn-sm btn-danger"
                                                            id="delete">Zmazať</a></td>
                                                 </tr>
                                             @endforeach
@@ -111,11 +109,9 @@
                                                     <td>{{$device->inventory_number}}</td>
                                                     <td>{{$device->order->end_of_warranty}}</td>
                                                     <td>{{$device->requests[0]->user->name}}</td>
-                                                    <td><a href="{{url('edit/position/'.$device->id)}}"
-                                                           class="btn btn-sm btn-info">Editovať</a> ||
-                                                        <a href="{{url('delete/position/'.$device->id)}}"
-                                                           class="btn btn-sm btn-danger"
-                                                           id="delete">Zmazať</a></td>
+                                                    <td><a href="#" class="btn btn-sm btn-info">Editovať</a> ||
+                                                        <a href="#" class="btn btn-sm btn-danger"
+                                                           id="delete" >Zmazať</a></td>
                                                 </tr>
                                             @endforeach
                                             </tbody>

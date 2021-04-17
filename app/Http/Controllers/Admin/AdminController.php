@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Department;
 use App\Http\Controllers\Controller;
+use App\Models\Hardware\Device;
 use App\Models\Position;
 use App\Models\Role;
 use App\User;
@@ -12,10 +13,12 @@ use Illuminate\Http\Request;
 class AdminController extends Controller
 {
     public function home(){
-        return view('admin.home');
+        $devices_count_available = Device::all()->where('status', '=', '1')->count();
+        $devices_count_unavailable = Device::all()->where('status', '=', '2')->count();
+        return view('admin.home', compact('devices_count_available', 'devices_count_unavailable'));
     }
     public function users(){
-        $users = User::all();
+        $users = User::all()->where('active','=','1');
         $positions = Position::all();
         $roles = Role::all();
         $departments = Department::all();

@@ -9,20 +9,19 @@
 
     <div class="sl-mainpanel">
         <nav class="breadcrumb sl-breadcrumb">
-            <a class="breadcrumb-item" href="index.html">Starlight</a>
-            <a class="breadcrumb-item" href="index.html">Tables</a>
-            <span class="breadcrumb-item active">Typy</span>
+            <a class="breadcrumb-item" href="{{route('admin.home')}}">Domov</a>
+            <span class="breadcrumb-item active">Objednávky</span>
         </nav>
 
         <div class="sl-pagebody">
             <div class="sl-page-title">
-                <h5>Typy</h5>
+                <h5>Objednávky</h5>
             </div><!-- sl-page-title -->
 
             <div class="card pd-20 pd-sm-40">
                 <h6 class="card-body-title">Zoznam typov zariadení <a href="{{route('add.order')}}"
                                                                       class="btn btn-sm btn-warning"
-                                                                      style="float: right">Pridať nový typ</a>
+                                                                      style="float: right">Pridať novú objednávku</a>
                 </h6>
 
                 <div class="table-wrapper">
@@ -33,7 +32,6 @@
                             <th class="wd-15p">Číslo objednávky</th>
                             <th class="wd-15p">Dátum dodania</th>
                             <th class="wd-15p">Dátum konca záruky</th>
-                            <th class="wd-20p">Akcia</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -41,10 +39,8 @@
                             <tr>
                                 <td>{{$order->id}}</td>
                                 <td>{{$order->order_number}}</td>
-                                <td>{{$order->delivery_date}}</td>
-                                <td>{{$order->end_of_warranty}}</td>
-                                <td><a href="{{url('delete/position/'.$order->id)}}" class="btn btn-sm btn-danger"
-                                       id="delete">Zmazať</a></td>
+                                <td>{{\Carbon\Carbon::parse($order->delivery_date)->format('d.m.Y')}}</td>
+                                <td>{{\Carbon\Carbon::parse($order->end_of_warranty)->format('d.m.Y')}}</td>
                             </tr>
                         @endforeach
                         </tbody>

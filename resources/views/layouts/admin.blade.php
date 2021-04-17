@@ -49,7 +49,7 @@
 
 @else
     <!-- ########## START: LEFT PANEL ########## -->
-    <div class="sl-logo"><a href=""><i class="icon ion-android-star-outline"></i> Virtuálny sklad</a></div>
+    <div class="sl-logo"><a href="{{route('admin.home')}}"><i class="icon ion-android-star-outline"></i> Virtuálny sklad</a></div>
     <div class="sl-sideleft">
         <div class="sl-sideleft-menu">
             <a href="{{url('admin/home')}}" class="sl-menu-link {{request()->routeIs('admin.home') ? 'active' : '' }}">
@@ -125,7 +125,7 @@
                                             class="icon ion-ios-person-outline"></i> Môj Profil</a></li>
                             <li><a href="{{route('logout')}}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();"><i
-                                            class="icon ion-power"></i> Sign Out</a></li>
+                                            class="icon ion-power"></i> Odhlásiť sa</a></li>
 
                         </ul>
                     </div><!-- dropdown-menu -->

@@ -8,6 +8,7 @@ use App\Models\Hardware\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\VarDumper\VarDumper;
 
 class RequestController extends Controller
@@ -126,7 +127,7 @@ class RequestController extends Controller
             'message' => 'Žiadosť bola úspešne potvrdená.',
             'alert-type' => 'success',
         );
-        return Redirect()->route('home')->with($notification);
+        return Redirect()->route('admin.home')->with($notification);
    }
 
 }
