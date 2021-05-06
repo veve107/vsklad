@@ -6,11 +6,7 @@
 @section('admin_content')
     <!-- ########## START: MAIN PANEL ########## -->
     <div class="sl-mainpanel">
-        <nav class="breadcrumb sl-breadcrumb">
-            <a class="breadcrumb-item" href="index.html">Starlight</a>
-            <a class="breadcrumb-item" href="index.html">Forms</a>
-            <span class="breadcrumb-item active">Form Wizards</span>
-        </nav>
+        {{\Diglactic\Breadcrumbs\Breadcrumbs::render('processRequest', $request)}}
         @if($errors->any())
             <div class="alert alert-danger">
                 <ul style="margin-bottom: 0!important;">
@@ -68,19 +64,37 @@
         </div>
         <div class="sl-pagebody">
             <div class="card pd-20 pd-sm-40">
-                <form action="{{route('process.store', $request->id)}}" method="post">
+                <form action="{{route('request.process.store', $request->id)}}" method="post">
                     @csrf
                     <div class="form-layout">
                         <div class="row mg-b-25">
                             @foreach($types as $type)
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label">{{$type->name}}</label>
+                                        <select id="{{$type->name}}_id" class="form-control select2-show-search"
+                                                name="{{$type->name}}"
+                                                data-placeholder="">
+                                            <option label="Výber..." disabled selected></option>
+                                            @foreach($type->devices as $device)
+                                                @if($device->status == 1)
+                                                    <option value="{{$device->id}}">{{$device->name}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div><!-- col-4 -->
+                            @endforeach
+                            @if(!empty($types->find('1')) || !empty($types->find('2')))
+                                @foreach($accessories as $accessory)
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label class="form-control-label">{{$type->name}}</label>
-                                            <select id="{{$type->name}}_id" class="form-control select2-show-search"
-                                                    name="{{$type->name}}"
+                                            <label class="form-control-label">{{$accessory->name}}</label>
+                                            <select id="{{$accessory->name}}_id" class="form-control select2-show-search"
+                                                    name="{{$accessory->name}}"
                                                     data-placeholder="">
-                                                <option label="Zvoľ {{$type->name}}" disabled selected></option>
-                                                @foreach($type->devices as $device)
+                                                <option label="Výber..." disabled selected></option>
+                                                @foreach($accessory->devices as $device)
                                                     @if($device->status == 1)
                                                         <option value="{{$device->id}}">{{$device->name}}</option>
                                                     @endif
@@ -88,7 +102,8 @@
                                             </select>
                                         </div>
                                     </div><!-- col-4 -->
-                            @endforeach
+                                @endforeach
+                            @endif
                         </div><!-- row -->
 
                         <div class="form-layout-footer">
@@ -102,50 +117,4 @@
     </div><!-- sl-mainpanel -->
     <!-- ########## END: MAIN PANEL ########## -->
 @endsection
-
-@push('scripts')
-    <script src="{{asset('backend/lib/jquery.steps/jquery.steps.js')}}"></script>
-    <script src="{{asset('backend/lib/parsleyjs/parsley.js')}}"></script>
-    <script>
-        (function ($) {
-            $('#wizard2').steps({
-                headerTag: 'h3',
-                bodyTag: 'section',
-                autoFocus: true,
-                titleTemplate: '<span class="number">#index#</span> <span class="title">#title#</span>',
-                onStepChanging: function (event, currentIndex, newIndex) {
-                    if (currentIndex < newIndex) {
-                        // Step 1 form validation
-                        if (currentIndex === 0) {
-                            var types = $("#types").parsley();
-                            if (types.isValid()) {
-                                return true;
-                            } else {
-                                types.validate();
-                            }
-                        }
-
-                        // Step 2 form validation
-                        if (currentIndex === 1) {
-                            var reason = $('#reason').parsley();
-                            if (email.isValid()) {
-                                return true;
-                            } else {
-                                email.validate();
-                            }
-                        }
-                        // Always allow step back to the previous step even if the current step is not valid.
-                    } else {
-                        return true;
-                    }
-                }
-            });
-            $('.select2').select2({
-                minimumResultsForSearch: Infinity
-            });
-        })(jQuery);
-
-
-    </script>
-@endpush
 

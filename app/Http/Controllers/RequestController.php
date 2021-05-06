@@ -50,8 +50,34 @@ class RequestController extends Controller
     public function process($id)
     {
         $request = \App\Models\Request::find($id);
+        if (empty($request->user->department)) {
+            $notification = array(
+                'message' => 'Žiadateľ nemá nastavené oddelenie! Doplniť!',
+                'alert-type' => 'error',
+            );
+            return Redirect()->back()->with($notification);
+        }
         $types = $request->types;
-        return view('admin.request.process', compact('types', 'request'));
+        $accessories = [];
+        // Ak je request o laptop
+        if (!empty($types->find('1'))) {
+            if (empty($types->find('3'))) {
+                array_push($accessories, Type::find(3));
+            }
+            if (empty($types->find('4'))) {
+                array_push($accessories, Type::find(4));
+            }
+        }
+        // Ak je request o pocitac
+        if (!empty($types->find('2'))) {
+            if (empty($types->find('3'))) {
+                array_push($accessories, Type::find(3));
+            }
+            if (empty($types->find('5'))) {
+                array_push($accessories, Type::find(5));
+            }
+        }
+        return view('admin.request.process', compact('types', 'request', 'accessories'));
     }
 
     public function processStore(Request $request, $id)
@@ -62,11 +88,24 @@ class RequestController extends Controller
         foreach ($types as $type) {
             $valArr[$type->name] = 'required';
         }
+        if (!empty($types->find(1))) {
+            $valArr['Myš'] = 'required';
+            $valArr['Taška'] = 'required';
+        }
+        if (!empty($types->find(2))) {
+            $valArr['Myš'] = 'required';
+            $valArr['Klávesnica'] = 'required';
+        }
         $this->validate($request, $valArr);
-
-        foreach ($types as $type) {
-            $device = Device::find($request[$type->name]);
-            $device->status = 2;
+        $requestArray = $request->request->all();
+        array_shift($requestArray);
+        foreach ($requestArray as $key => $item) {
+            $device = Device::find($item);
+            if ($device->type->type == 1) {
+                $device->status = 2;
+            } else {
+                $device->stock -= 1;
+            }
             $device->save();
             $r->devices()->attach($device);
         }
@@ -81,18 +120,107 @@ class RequestController extends Controller
         return Redirect()->route('request.index')->with($notification);
     }
 
-    public function sendMail($id)
+    public function processForIssue($id)
     {
         $request = \App\Models\Request::find($id);
         $request->state_id = 3;
         $request->touch();
         $request->save();
-        Mail::to($request->user->email)->send(new RequestVerification($request));
         $notification = array(
-            'message' => 'Žiadosť o potvrdenie úspešne odoslaná.',
+            'message' => 'Žiadosť pripravená pre odovzdanie.',
             'alert-type' => 'info',
         );
+        return Redirect()->back()->with($notification);
+    }
+
+    public function receive($id)
+    {
+        $request = \App\Models\Request::find($id);
+        if (Auth::user()->id == $request->user->id) {
+            $request->state_id = 4;
+            $request->touch();
+            $request->save();
+            $notification = array(
+                'message' => 'Žiadosť vyzdvihnutá.',
+                'alert-type' => 'info',
+            );
+        } else {
+            $notification = array(
+                'message' => 'Na vykonanie tejto činnosti nemáte práva!',
+                'alert-type' => 'error',
+            );
+        }
+        return Redirect()->back()->with($notification);
+    }
+
+    public function returnRequest($id)
+    {
+        $request = \App\Models\Request::find($id);
+        return view('admin.request.return', compact('request'));
+    }
+
+    public function returnStore(Request $r)
+    {
+        $requestData = $r->all();
+        $request = \App\Models\Request::find($requestData['request_id']);
+        if (Auth::user()->id == $request->user->id) {
+            foreach ($request->devices as $device) {
+                if (empty($requestData[$device->type->name . "-checkbox"]) ||  $requestData[$device->type->name . "-checkbox"] != "on") {
+                    $notification = array(
+                        'message' => 'Nevrátili ste všetky zariadenia!',
+                        'alert-type' => 'error',
+                    );
+                    return Redirect()->back()->with($notification);
+                }
+                if ($device->type->type == 1) {
+                    if ($device->serial_number != $requestData[$device->type->name . '-serial']) {
+                        $notification = array(
+                            'message' => 'Nevrátili ste správny hardvér!',
+                            'alert-type' => 'error',
+                        );
+                        return Redirect()->back()->with($notification);
+                    }
+                }
+            }
+
+            $request->state_id = 5;
+            $request->touch();
+            $request->save();
+            $notification = array(
+                'message' => 'Zariadenia vrátené.',
+                'alert-type' => 'info',
+            );
+        } else {
+            $notification = array(
+                'message' => 'Na vykonanie tejto činnosti nemáte práva!',
+                'alert-type' => 'error',
+            );
+        }
         return Redirect()->route('request.index')->with($notification);
+    }
+
+    public function confirmReturnRequest($id)
+    {
+        $request = \App\Models\Request::find($id);
+        foreach ($request->devices as $device) {
+            if ($device->type->type == 1) {
+                $device->status = 1;
+
+            } else {
+                $device->stock++;
+            }
+            $device->save();
+//                $request->devices()->detach($device);
+        }
+        $request->state_id = 6;
+        $request->touch();
+        $request->save();
+        $notification = array(
+            'message' => 'Vrátenie žiadosťi potvrdené.',
+            'alert-type' => 'info',
+        );
+
+        return Redirect()->back()->with($notification);
     }
 
     public function detail($id)
@@ -101,14 +229,16 @@ class RequestController extends Controller
         return view('admin.request.detail', compact('request'));
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $request = \App\Models\Request::find($id);
-        if($request->state_id == 1){
+        if ($request->state_id == 1) {
 
         }
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         $request = \App\Models\Request::find($id);
         $request->types()->detach();
         $notification = array(
@@ -119,7 +249,8 @@ class RequestController extends Controller
         return Redirect()->route('request.index')->with($notification);
     }
 
-    public function verify($id){
+    public function verify($id)
+    {
         $request = \App\Models\Request::find($id);
         $request->state_id = 4;
         $request->save();
@@ -128,6 +259,6 @@ class RequestController extends Controller
             'alert-type' => 'success',
         );
         return Redirect()->route('admin.home')->with($notification);
-   }
+    }
 
 }

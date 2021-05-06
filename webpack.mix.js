@@ -11,5 +11,8 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
+mix.js(["resources/js/package.js",'resources/js/app.js'], 'js/app.js').extract([
+    // Extract packages from node_modules to vendor.js
+    'jquery'
+])
    .sass('resources/sass/app.scss', 'public/css');

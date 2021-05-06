@@ -16,8 +16,8 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('order_number');
-            $table->date('delivery_date');
-            $table->date('end_of_warranty');
+            $table->timestamp('delivery_date');
+            $table->timestamp('end_of_warranty')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
         });
     }

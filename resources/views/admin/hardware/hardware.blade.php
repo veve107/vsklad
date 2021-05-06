@@ -8,12 +8,7 @@
 @section('admin_content')
 
     <div class="sl-mainpanel">
-        <nav class="breadcrumb sl-breadcrumb">
-            <a class="breadcrumb-item" href="index.html">Starlight</a>
-            <a class="breadcrumb-item" href="index.html">Tables</a>
-            <span class="breadcrumb-item active">Pozície</span>
-        </nav>
-
+        {{\Diglactic\Breadcrumbs\Breadcrumbs::render('hardware')}}
         <div class="sl-pagebody">
             <div class="sl-page-title">
                 <h5>Zariadenia</h5>
@@ -50,11 +45,13 @@
                                                 <th class="wd-10p">Značka</th>
                                                 <th class="wd-10p">Názov zariadenia</th>
                                                 <th class="wd-10p">Typ zariadenia</th>
+                                                <th class="wd-10p">Druh zariadenia</th>
                                                 <th class="wd-10p">Číslo objednávky</th>
+                                                <th class="wd-10p">Počet kusov</th>
                                                 <th class="wd-10p">Sériové číslo</th>
                                                 <th class="wd-10p">Inventárne číslo</th>
                                                 <th class="wd-10p">Záruka do</th>
-                                                <th class="wd-20p">Akcia</th>
+{{--                                                <th class="wd-20p">Akcia</th>--}}
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -64,13 +61,15 @@
                                                     <td>{{$device->brand->name}}</td>
                                                     <td>{{$device->name}}</td>
                                                     <td>{{$device->type->name}}</td>
+                                                    <td>{{$device->type->type == 1 ? "Hardvér" : "Doplnok"}}</td>
                                                     <td>{{$device->order->order_number}}</td>
+                                                    <td>{{$device->stock}}</td>
                                                     <td>{{$device->serial_number}}</td>
-                                                    <td>{{$device->inventory_number}}</td>
-                                                    <td>{{$device->order->end_of_warranty}}</td>
-                                                    <td><a href="#" class="btn btn-sm btn-info">Editovať</a> ||
-                                                        <a href="#" class="btn btn-sm btn-danger"
-                                                           id="delete">Zmazať</a></td>
+                                                    <td>{{empty($device->inventory_number) ? "Nenastavené" : $device->inventory_number}}</td>
+                                                    <td>{{\Carbon\Carbon::parse($device->order->end_of_warranty)->format('d.m.Y')}}</td>
+{{--                                                    <td><a href="#" class="btn btn-sm btn-info">Editovať</a> ||--}}
+{{--                                                        <a href="#" class="btn btn-sm btn-danger"--}}
+{{--                                                           id="delete">Zmazať</a></td>--}}
                                                 </tr>
                                             @endforeach
                                             </tbody>
@@ -94,7 +93,7 @@
                                                 <th class="wd-10p">Inventárne číslo</th>
                                                 <th class="wd-10p">Záruka do</th>
                                                 <th class="wd-10p">Používateľ</th>
-                                                <th class="wd-20p">Akcia</th>
+{{--                                                <th class="wd-20p">Akcia</th>--}}
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -107,11 +106,11 @@
                                                     <td>{{$device->order->order_number}}</td>
                                                     <td>{{$device->serial_number}}</td>
                                                     <td>{{$device->inventory_number}}</td>
-                                                    <td>{{$device->order->end_of_warranty}}</td>
+                                                    <td>{{\Carbon\Carbon::parse($device->order->end_of_warranty)->format('d.m.Y')}}</td>
                                                     <td>{{$device->requests[0]->user->name}}</td>
-                                                    <td><a href="#" class="btn btn-sm btn-info">Editovať</a> ||
-                                                        <a href="#" class="btn btn-sm btn-danger"
-                                                           id="delete" >Zmazať</a></td>
+{{--                                                    <td><a href="#" class="btn btn-sm btn-info">Editovať</a> ||--}}
+{{--                                                        <a href="#" class="btn btn-sm btn-danger"--}}
+{{--                                                           id="delete" >Zmazať</a></td>--}}
                                                 </tr>
                                             @endforeach
                                             </tbody>

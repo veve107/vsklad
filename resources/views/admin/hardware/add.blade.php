@@ -5,10 +5,7 @@
 @section('admin_content')
 
     <div class="sl-mainpanel">
-        <nav class="breadcrumb sl-breadcrumb">
-            <a class="breadcrumb-item" href="index.html">Domov</a>
-            <span class="breadcrumb-item active">Pridanie zariadenia</span>
-        </nav>
+        {{\Diglactic\Breadcrumbs\Breadcrumbs::render('addHardware')}}
         @if($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -52,7 +49,7 @@
                                             data-placeholder="Vyber typ">
                                         <option label="Zvoľ značku" disabled></option>
                                         @foreach($types as $type)
-                                            <option value="{{$type->id}}">{{$type->name}}</option>
+                                            <option value="{{$type->id}}" data-type="{{$type->type}}">{{$type->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -73,17 +70,24 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label class="form-control-label">Sériové číslo: <span
-                                            class="tx-danger">*</span></label>
+                                            class="tx-danger hardware">*</span></label>
                                     <input class="form-control" type="text" name="serial_number"
                                            placeholder="Zadaj sériové číslo">
                                 </div>
                             </div><!-- col-4 -->
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label class="form-control-label">Inventárne číslo: <span
-                                            class="tx-danger">*</span></label>
+                                    <label class="form-control-label">Inventárne číslo: </label>
                                     <input class="form-control" type="text" name="inventory_number"
                                            placeholder="Zadaj inventárne číslo">
+                                </div>
+                            </div><!-- col-4 -->
+                            <div class="col-lg-4 accessories" style="display: none">
+                                <div class="form-group">
+                                    <label class="form-control-label">Počet kusov: <span
+                                            class="tx-danger hardware">*</span></label>
+                                    <input class="form-control" type="number" name="stock"
+                                           placeholder="Zadaj počet kusov">
                                 </div>
                             </div><!-- col-4 -->
                         </div><!-- row -->
@@ -100,13 +104,10 @@
 
     <script>
         $(function () {
-
             'use strict';
-
             $('.select2').select2({
                 minimumResultsForSearch: Infinity
             });
-
             // Select2 by showing the search
             $('.select2-show-search').select2({
                 minimumResultsForSearch: '',
@@ -118,7 +119,15 @@
                 tags: true,
                 tokenSeparators: [',', ' ']
             });
-
+            $("#type_id").change(function(){
+                if($(this).find(':selected').attr('data-type') == 1 || $(this).find(':selected').attr('data-type') == 2){
+                    $('.accessories').hide()
+                    $('.hardware').show();
+                }else {
+                    $('.accessories').show()
+                    $('.hardware').hide();
+                }
+            })
         });
     </script>
 @endsection

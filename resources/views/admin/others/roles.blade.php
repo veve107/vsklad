@@ -8,12 +8,7 @@
 @section('admin_content')
 
     <div class="sl-mainpanel">
-        <nav class="breadcrumb sl-breadcrumb">
-            <a class="breadcrumb-item" href="index.html">Starlight</a>
-            <a class="breadcrumb-item" href="index.html">Tables</a>
-            <span class="breadcrumb-item active">Role</span>
-        </nav>
-
+        {{\Diglactic\Breadcrumbs\Breadcrumbs::render('roles')}}
         <div class="sl-pagebody">
             <div class="sl-page-title">
                 <h5>Role</h5>
@@ -40,8 +35,8 @@
                             <tr>
                                 <td>{{$role->id}}</td>
                                 <td>{{$role->name}}</td>
-                                <td><a href="{{url('edit/role/'.$role->id)}}" class="btn btn-sm btn-info">Editovať</a> ||
-                                    <a href="{{url('delete/role/'.$role->id)}}"
+                                <td><a href="{{route('role.edit', $role->id}}" class="btn btn-sm btn-info">Editovať</a> ||
+                                    <a href="{{route('role.delete', $role->id}}"
                                        class="btn btn-sm btn-danger"
                                        id="delete">Zmazať</a></td>
                             </tr>

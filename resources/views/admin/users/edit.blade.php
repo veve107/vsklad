@@ -3,12 +3,7 @@
 @section('admin_content')
 
     <div class="sl-mainpanel">
-        <nav class="breadcrumb sl-breadcrumb">
-            <a class="breadcrumb-item" href="index.html">Starlight</a>
-            <a class="breadcrumb-item" href="index.html">Tables</a>
-            <span class="breadcrumb-item active">Pozície</span>
-        </nav>
-
+        {{\Diglactic\Breadcrumbs\Breadcrumbs::render('editProfile', $user)}}
         <div class="sl-pagebody">
             <div class="sl-page-title">
                 <h5>Oddelenia</h5>

@@ -10798,7 +10798,6 @@ table.dataTable.no-footer {
   border-radius: 0;
   display: none;
   width: auto !important;
-  z-index: 5 !important;
 }
 .ui-datepicker .ui-datepicker-header {
   display: flex;
