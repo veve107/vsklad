@@ -17,6 +17,8 @@ class CreateRequestsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('user_id');
             $table->text('reason');
+            $table->integer('technician_id')->nullable();
+            $table->integer('state_id')->default(1);
             $table->timestamps();
         });
     }

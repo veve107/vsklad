@@ -12,6 +12,10 @@
 */
 
 
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\HardwareController;
+use App\Http\Controllers\RequestController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -24,60 +28,106 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
-    // Home
-    Route::get('/home', 'HomeController@index')->name('home');
-    Route::get('/admin/home', 'Admin\AdminController@home')->name('admin.home');
+    Route::get('/home', [AdminController::class, 'home'])->name('admin.home');
 
-    // Sprava pouzivatelov
-    Route::get('admin/users', 'Admin\AdminController@users')->name('admin.positions.users');
-    Route::post('store/user', 'UserController@storeUser')->name('user.store');
-    Route::get('edit/user/{id}', 'UserController@edit')->name('user.edit');
-    Route::post('update/user/{id}', 'UserController@update')->name('user.update');
-    Route::get('delete/user/{id}', 'UserController@delete')->name('user.delete');
-    Route::get('user/profile/{id}', 'UserController@profile')->name('user.profile');
+    Route::group(['middleware' => ['isTechnician'], 'prefix' => 'admin'], function(){
+        // Administrativa pouzivatelov
+        Route::group(['middleware' => ['isAdmin'], 'prefix' => 'user'], function(){
+            Route::get('/index', [UserController::class, 'users'])->name('users');
+            Route::post('/store', [UserController::class, 'storeUser'])->name('user.store');
+            Route::get('/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
+        });
 
-    // Sprava roli
-    Route::get('admin/roles', 'Admin\AdminController@roles')->name('admin.positions.roles');
-    Route::post('store/role', 'Admin\AdminController@storeRole')->name('store.role');
-    Route::get('delete/role/{id}', 'Admin\AdminController@deleteRole')->name('delete.role');
+        // Sprava roli
+        /*Route::prefix('role')->group(function(){
+            Route::get('/index', [AdminController::class, 'roles'])->name('roles');
+            Route::post('/store', [AdminController::class, 'storeRole'])->name('role.store');
+            Route::get('/delete/{id}', [AdminController::class, 'deleteRole'])->name('role.delete');
+        });*/
 
-    // Sprava pozicii
-    Route::get('admin/positions', 'Admin\AdminController@positions')->name('admin.positions');
-    Route::post('store/position', 'Admin\AdminController@storePosition')->name('store.position');
-    Route::get('delete/position/{id}', 'Admin\AdminController@deletePosition')->name('delete.position');
+        // Sprava pozicii
+        Route::prefix('position')->group(function(){
+            Route::get('/index', [AdminController::class, 'positions'])->name('users.positions');
+            Route::post('/store', [AdminController::class, 'storePosition'])->name('position.store');
+            Route::get('/delete/{id}', [AdminController::class, 'deletePosition'])->name('position.delete');
+            Route::post('/update/{id}', [AdminController::class, 'updatePosition'])->name('position.update');
+            Route::post('/update', function(){
+                return back();
+            })->name('position.update.dummy');
+        });
 
-    // Sprava oddeleni
-    Route::get('admin/departments', 'Admin\AdminController@departments')->name('admin.positions.departments');
-    Route::post('store/department', 'Admin\AdminController@storeDepartment')->name('store.department');
-    Route::get('delete/department/{id}', 'Admin\AdminController@deleteDepartment')->name('delete.department');
+        // Sprava oddeleni
+        Route::prefix('department')->group(function(){
+            Route::get('/index', [AdminController::class, 'departments'])->name('users.departments');
+            Route::post('/store', [AdminController::class, 'storeDepartment'])->name('department.store');
+            Route::get('/delete/{id}', [AdminController::class, 'deleteDepartment'])->name('department.delete');
+            Route::post('/update/{id}', [AdminController::class, 'updateDepartment'])->name('department.update');
+            Route::post('/update', function(){
+                return back();
+            })->name('department.update.dummy');
+        });
 
-    // Ziadosti
-    Route::get('admin/request/add', 'RequestController@add')->name('request.add');
-    Route::get('admin/request', 'RequestController@index')->name('request.index');
-    Route::post('admin/request/store', 'RequestController@store')->name('request.store');
-    Route::post('admin/request/process/{id}', 'RequestController@processStore')->name('process.store');
-    Route::get('admin/request/process/{id}', 'RequestController@process')->name('request.process');
-    Route::get('admin/request/process/{id}/mail', 'RequestController@sendMail')->name('request.sendMail');
-    Route::get('admin/request/detail/{id}', 'RequestController@detail')->name('request.detail');
-    Route::get('admin/request/edit/{id}', 'RequestController@edit')->name('request.edit');
-    Route::get('admin/request/delete/{id}', 'RequestController@delete')->name('request.delete');
-    Route::get('admin/request/verify/{id}', 'RequestController@verify')->name('request.verify');
+        // Sprava zariadeni
+        Route::prefix('hardware')->group(function(){
+            Route::get('/index', [HardwareController::class, 'hardware'])->name('hardware');
+            Route::get('/add', [HardwareController::class, 'addHardware'])->name('hardware.add');
+            Route::post('/store', [HardwareController::class, 'storeHardware'])->name('hardware.store');
+        });
 
-    // Správa techniky
-    Route::get('admin/hardware', 'Admin\HardwareController@hardware')->name('hardware.index');
-    Route::get('admin/hardware/add', 'Admin\HardwareController@addHardware')->name('hardware.add');
-    Route::post('admin/hardware/store', 'Admin\HardwareController@storeHardware')->name('hardware.store');
+        // Sprava typov zariadeni
+        Route::prefix('type')->group(function(){
+            Route::get('/index', [HardwareController::class, 'types'])->name('hardware.types');
+            Route::post('/store', [HardwareController::class, 'storeType'])->name('type.store');
+            Route::post('/update/{id}', [HardwareController::class, 'updateType'])->name('type.update');
+            Route::get('/delete/{id}', [HardwareController::class, 'deleteType'])->name('type.delete');
+            Route::post('/update', function(){ return redirect()->back();})->name('type.update.dummy');
+        });
 
-    Route::get('admin/types', 'Admin\HardwareController@types')->name('hardware.types');
-    Route::post('admin/type/store', 'Admin\HardwareController@storeType')->name('store.type');
-    Route::get('admin/type/delete/{id}', 'Admin\HardwareController@deleteType')->name('delete.type');
+        // Sprava objednavok
+        Route::prefix('order')->group(function(){
+            Route::get('/index', [HardwareController::class, 'orders'])->name('hardware.orders');
+            Route::post('/store', [HardwareController::class, 'storeOrder'])->name('order.store');
+            Route::get('/delete/{id}', [HardwareController::class, 'deleteOrder'])->name('order.delete');
+        });
 
-    Route::get('admin/orders', 'Admin\HardwareController@orders')->name('hardware.orders');
-    Route::get('admin/add/order', 'Admin\HardwareController@addOrder')->name('add.order');
-    Route::post('admin/order/store', 'Admin\HardwareController@storeOrder')->name('store.order');
+        // Sprava znaciek
+        Route::prefix('brand')->group(function(){
+            Route::get('/index', [HardwareController::class, 'brands'])->name('hardware.brands');
+            Route::post('/store', [HardwareController::class, 'storeBrand'])->name('brand.store');
+            Route::post('/update/{id}', [HardwareController::class, 'updateBrand'])->name('brand.update');
+            Route::get('/delete/{id}', [HardwareController::class, 'deleteBrand'])->name('brand.delete');
+            Route::post('/update', function(){ return redirect()->back();})->name('brand.update.dummy');
 
-    Route::get('admin/brands', 'Admin\HardwareController@brands')->name('hardware.brands');
-    Route::post('admin/brands/store', 'Admin\HardwareController@storeBrand')->name('store.brand');
+        });
 
+        // Sprava ziadosti Admin
+        Route::prefix('request')->group(function(){
+            Route::get('/process/{id}', [RequestController::class, 'process'])->name('request.process');
+            Route::post('/process/{id}', [RequestController::class, 'processStore'])->name('request.process.store');
+            Route::get('/process/{id}/issue', [RequestController::class, 'processForIssue'])->name('request.processForIssue');
+            Route::get('/confirm/{id}', [RequestController::class, 'confirmReturnRequest'])->name('request.confirm');
+
+        });
+    });
+
+    // Sprava jedneho pouzivatela
+    Route::prefix('user')->group(function(){
+        Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+        Route::post('/update/{id}', [UserController::class, 'update'])->name('user.update');
+        Route::get('/profile/{id}', [UserController::class, 'profile'])->name('user.profile');
+    });
+
+    // Sprava ziadosti Pouzivatel
+    Route::prefix('request')->group(function(){
+        Route::get('/index', [RequestController::class, 'index'])->name('request.index');
+        Route::get('/add', [RequestController::class, 'add'])->name('request.add');
+        Route::post('/store', [RequestController::class, 'store'])->name('request.store');
+        Route::get('/detail/{id}', [RequestController::class, 'detail'])->name('request.detail');
+        Route::get('/edit/{id}', [RequestController::class, 'edit'])->name('request.edit');
+        Route::get('/delete/{id}', [RequestController::class, 'delete'])->name('request.delete');
+        Route::get('/receive/{id}', [RequestController::class, 'receive'])->name('request.receive');
+        Route::get('/return/{id}', [RequestController::class, 'returnRequest'])->name('request.return');
+        Route::post('/return', [RequestController::class, 'returnStore'])->name('request.return.store');
+    });
 });
 

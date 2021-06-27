@@ -11,6 +11,16 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+
+    public function users()
+    {
+        $users = User::all()->where('active', '=', '1');
+        $positions = Position::all();
+        $roles = Role::all();
+        $departments = Department::all();
+        return view('admin.users.index', compact('users', 'positions', 'roles', 'departments'));
+    }
+
     public function storeUser(Request $request)
     {
         $this->validate($request, [
@@ -55,7 +65,7 @@ class UserController extends Controller
             'message' => 'Používateľ úspešne upravený.',
             'alert-type' => 'success',
         );
-        return Redirect()->route('admin.positions.users')->with($notification);
+        return Redirect()->route('users')->with($notification);
     }
 
     public function edit($id)
@@ -72,13 +82,20 @@ class UserController extends Controller
         /**
          * @var $user User
          */
+
         $user = User::findOrFail($id);
         if(Auth::user()->id == $user->id){
             $notification = array(
                 'message' => 'Nie je možné odstrániť samého seba!',
                 'alert-type' => 'error',
             );
-        }else{
+        }else if($user->requests->where('state_id', "!=", "6")->count() != 0){
+            $notification = array(
+                'message' => 'Užívateľ má neukončné žiadosti!',
+                'alert-type' => 'error',
+            );
+        }
+        else{
             $user->active = 0;
             $user->save();
             $notification = array(
@@ -87,7 +104,7 @@ class UserController extends Controller
             );
         }
 
-        return Redirect()->route('admin.positions.users')->with($notification);
+        return Redirect()->back()->with($notification);
 
     }
 

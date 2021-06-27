@@ -15,9 +15,12 @@ class PositionsTableSeeder extends Seeder
             'id' => '1',
             'name' => 'CEO',
         ]);
-
         DB::table('positions')->insert([
             'id' => '2',
+            'name' => 'Zamestnanec',
+        ]);
+        DB::table('positions')->insert([
+            'id' => '3',
             'name' => 'Brigadnik',
         ]);
     }

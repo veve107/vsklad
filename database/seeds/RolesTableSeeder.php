@@ -14,13 +14,14 @@ class RolesTableSeeder extends Seeder
         DB::table('roles')->insert([
             'id' => '1',
             'name' => 'Admin',
-            'slug' => 'admin',
         ]);
-
         DB::table('roles')->insert([
             'id' => '2',
+            'name' => 'Technik',
+        ]);
+        DB::table('roles')->insert([
+            'id' => '3',
             'name' => 'Zamestnanec',
-            'slug' => 'zamestnanec',
         ]);
     }
 }

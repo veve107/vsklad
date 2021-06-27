@@ -8,22 +8,18 @@
 @section('admin_content')
 
     <div class="sl-mainpanel">
-        <nav class="breadcrumb sl-breadcrumb">
-            <a class="breadcrumb-item" href="index.html">Starlight</a>
-            <a class="breadcrumb-item" href="index.html">Tables</a>
-            <span class="breadcrumb-item active">Typy</span>
-        </nav>
-
+        {{\Diglactic\Breadcrumbs\Breadcrumbs::render('brands')}}
         <div class="sl-pagebody">
             <div class="sl-page-title">
                 <h5>Značky</h5>
             </div><!-- sl-page-title -->
 
             <div class="card pd-20 pd-sm-40">
-                <h6 class="card-body-title">Zoznam značiek zariadení <a href="" class="btn btn-sm btn-warning"
-                                                                        style="float: right"
-                                                                        data-toggle="modal" data-target="#modaldemo3">Pridať
-                        novú značku</a>
+                <h6 class="card-body-title">Zoznam značiek zariadení
+                    <button class="btn btn-sm btn-warning"
+                            id="addBrand"
+                            style="float: right">Pridať novú značku
+                    </button>
                 </h6>
 
                 <div class="table-wrapper">
@@ -40,7 +36,15 @@
                             <tr>
                                 <td>{{$brand->id}}</td>
                                 <td>{{$brand->name}}</td>
-                                <td></td>
+                                <td>
+                                    <button class="btn btn-sm btn-info editButton"
+                                            data-id="{{$brand->id}}"
+                                            data-name="{{$brand->name}}">Editovať
+                                    </button>
+                                    ||
+                                    <a href="{{route('brand.delete', $brand->id)}}"
+                                       class="btn btn-sm btn-danger"
+                                       id="delete">Zmazať</a></td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -50,46 +54,6 @@
         </div>
     </div><!-- sl-mainpanel -->
 
-    <!-- LARGE MODAL -->
-
-    <div id="modaldemo3" class="modal fade">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content tx-size-sm">
-                <div class="modal-header pd-x-20">
-                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Pridaj značku</h6>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                @if($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach($errors->all() as $error)
-                                <li>{{$error}}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-
-                @endif
-
-                <form method="post" action="{{route('store.brand')}}">
-                    @csrf
-                    <div class="modal-body pd-20">
-                        <div class="form-group">
-                            <label for="name">Značka</label>
-                            <input type="text" class="form-control" id="name"
-                                   placeholder="Značka" name="name">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-info pd-x-20">Pridať</button>
-                        <button type="button" class="btn btn-secondary pd-x-20" data-dismiss="modal">Zavrieť</button>
-                    </div>
-                </form>
-            </div><!-- modal-dialog -->
-        </div><!-- modal -->
-    </div>
 @endsection
 @push('scripts')
     <script>
@@ -108,6 +72,51 @@
             });
             // Select2
             $('.dataTables_length select').select2({minimumResultsForSearch: Infinity});
+
+            $(".editButtosn").click(function () {
+                $("#updateForm").attr("action", '{{route('brand.update.dummy')}}/' + $(this).attr("data-id"));
+                $("#updateName").val($(this).attr('data-name'));
+            })
+
+            $("#addBrand").click(function () {
+                Swal.fire({
+                    title: 'Pridanie novej značky',
+                    html:
+                        '<form id="createBrand" method="post" action="{{route('brand.store')}}"> {{ csrf_field() }}' +
+                        '<input id="name" type="text" name="name" class="swal2-input" placeholder="Názov značky">' +
+                        '</form>',
+                    focusConfirm: false,
+                    customClass: 'swal2-overflow',
+                    confirmButtonText: "Pridaj značku",
+                    preConfirm: () => {
+                        return []
+                    },
+                }).then(function (result) {
+                    if (result.isConfirmed) {
+                        $("#createBrand").submit();
+                    }
+                })
+            });
+
+            $(".editButton").click(function () {
+                Swal.fire({
+                    title: 'Upravenie názvu značky',
+                    html:
+                        '<form id="updateBrand" method="post" action="{{route('brand.update.dummy')}}/' + $(this).attr('data-id') + '"> {{ csrf_field() }}' +
+                        '<input id="name" type="text" name="name" class="swal2-input" placeholder="Názov značky" value="' + $(this).attr('data-name') + '" >' +
+                        '</form>',
+                    focusConfirm: false,
+                    customClass: 'swal2-overflow',
+                    confirmButtonText: "Uprav názov značky",
+                    preConfirm: () => {
+                        return []
+                    },
+                }).then(function (result) {
+                    if (result.isConfirmed) {
+                        $("#updateBrand").submit();
+                    }
+                })
+            });
         })
     </script>
 

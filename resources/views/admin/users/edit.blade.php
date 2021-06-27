@@ -3,12 +3,7 @@
 @section('admin_content')
 
     <div class="sl-mainpanel">
-        <nav class="breadcrumb sl-breadcrumb">
-            <a class="breadcrumb-item" href="index.html">Starlight</a>
-            <a class="breadcrumb-item" href="index.html">Tables</a>
-            <span class="breadcrumb-item active">Pozície</span>
-        </nav>
-
+        {{\Diglactic\Breadcrumbs\Breadcrumbs::render('editProfile', $user)}}
         <div class="sl-pagebody">
             <div class="sl-page-title">
                 <h5>Oddelenia</h5>
@@ -63,7 +58,7 @@
                             </div><!-- col-4 -->
                             <div class="col-lg-4">
                                 <div class="form-group mg-b-10-force">
-                                    <label class="form-control-label">Typ: <span class="tx-danger">*</span></label>
+                                    <label class="form-control-label">Pozícia: <span class="tx-danger">*</span></label>
                                     <select id="position_id" class="form-control select2-show-search" name="position_id"
                                             data-placeholder="Vyber pozíciu">
                                         @foreach($positions as $position)

@@ -19,8 +19,10 @@ class CreateDevicesTable extends Migration
             $table->integer('brand_id');
             $table->integer('type_id');
             $table->integer('order_id');
-            $table->string('serial_number');
-            $table->integer('inventory_number');
+            $table->string('serial_number')->nullable();
+            $table->integer('inventory_number')->nullable();
+            $table->integer('status')->default(1);
+            $table->integer('stock')->default(1);
             $table->timestamps();
         });
     }

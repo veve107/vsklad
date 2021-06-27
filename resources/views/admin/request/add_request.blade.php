@@ -5,11 +5,7 @@
 @section('admin_content')
 
     <div class="sl-mainpanel">
-        <nav class="breadcrumb sl-breadcrumb">
-            <a class="breadcrumb-item" href="index.html">Domov</a>
-            <span class="breadcrumb-item active">Pridanie zariadenia</span>
-        </nav>
-
+        {{\Diglactic\Breadcrumbs\Breadcrumbs::render('addRequest')}}
         <div class="sl-pagebody">
             <div class="card pd-20 pd-sm-40">
                 @if($errors->any())

@@ -8,12 +8,8 @@
 
     <!-- ########## START: MAIN PANEL ########## -->
     <div class="sl-mainpanel">
-        <nav class="breadcrumb sl-breadcrumb">
-            <a class="breadcrumb-item" href="index.html">Starlight</a>
-            <a class="breadcrumb-item" href="index.html">Forms</a>
-            <span class="breadcrumb-item active">Form Wizards</span>
-        </nav>
-        @if($errors->any())
+        {{\Diglactic\Breadcrumbs\Breadcrumbs::render('detailRequest', $request)}}
+    @if($errors->any())
             <div class="alert alert-danger">
                 <ul style="margin-bottom: 0!important;">
                     @foreach($errors->all() as $error)
@@ -77,7 +73,7 @@
                                 <div class="form-group">
                                     <label class="form-control-label">{{$device->type->name}}</label>
                                     <input class="form-control" type="text"
-                                           value="{{$device->name}} || {{$device->serial_number}}"
+                                           value="{{$device->name}} {{!empty($device->serial_number) ? "|| ".$device->serial_number : ""}}"
                                            disabled>
                                 </div>
                             </div><!-- col-4 -->

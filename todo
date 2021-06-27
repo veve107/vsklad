@@ -16,3 +16,45 @@
 - Devices su vo many to many vztahu s requestami, treba prerobit na many to one
 - Order pridanie dorobit
 - Role pridanie dorobit
+
+Role: user/zamestanec: bude si moct ziadat o novu techniku, sledovat aku techniku na sebe ma vedenu, bude vediet zadat request ak mu nieco nebude spravne fungovat napriklad nabijacka...
+      technik: bude mat na starosti techniku jej vydavanie, sledovanie zaruky, opravovanie ale aj prijimanie novej techniky a jej zadavanie do systemu
+      admin/registrator: bude moct pridavat role zamestnancom, a ma na starost databazu zamestnancov, takze si sleduje ktory zamestnanec kde pracuje, ked zamestanec odchadza musi mat vratenu vsetku techniku az potom sa bude moct vymazat
+
+REGISTRACIA
+-do registracie pridat priezvisko?
+-nedalo sa mi zaregristovat! potom ocekovat chybove hlasky ci sedi heslo alebo nie si uz registrovany
+- pri registracii treba dat rolu zamestnanec
+
+MOJ PROFIL
+-prihlasanie a odhlasenie funguje
+user,technik: svoj profil nebude vediet menit max iba meno, ma v profile profesiu ale neviem ako si ju tam pridal asi chyba tlacitko v uprave formularu, tie obrasteky dat dake take neutral
+admin: ten by mal vediet menit vsetko ale email by som dala ako pevny, ktory sa neda menit
+- policka: email, telefonne cislo
+
+DASHBOARD:
+user: dake omacky, mozem spravit dake blogove veci ze ako sa starat o svoj pc a podobne srandy, ktore tam budu zobrazene ako clanocky?
+technik: tabulky kolko techniky ostava v sklade, nove ziadosti tam tiez dako zvyraznene? aj requsty na opravu, pripomienky ked konci dakej technike zaruka?(mam to v poziadavkach ale to je detail), tabulka technikov kto spravil najviac requestov zatial?
+admin:  daka tabulka ze kto dnes sa registroval aby ho mohol upravit dat mu kde pracuje a pod.. a to iste co technik
+
+POUZIVATELIA:
+-editovat a mazanie ide neviem ci mazanie si osetril iba ked nema techniku uzivatel
+-nejde pridanie role, asi tlacitko editovat netreba asi aj mazanie netreba, ak ano tak osetrit iba vtedy ked nikto tu rolu nepouziva
+-pozicia nejde editovat a mazanie tiez nefunguje to osetrit iba ked to nikto nepouziva?
+-oddelenia nejde editovat a mazanie tiez nefunguje to osetrit iba ked to nikto nepouziva?
+user:toto nebude vidiet
+technik: toto asi nemusi vidiet tiez
+admin: ten to vie editovat a mazat lebo to ma na starosti
+
+ZIADOST O TECHNIKU
+user:ano vidi, ked odosle tak daky alert alebo co ze vasa ziadost bola odoslana a uvidi svoju ziadost v zozname ziadosti ale bude ju vediet iba editovat,ktore nefuje a mazat, to funguje, detail funguje to je fajn, este doplnit pri nom vratenie zariadenia ale bude to fungovat ako klasicka ziadost ale potvrdzuje ju technik ze prebral zariadenie naspat
+technik: ich riesi ale tiez si moze o nieco zaziadat, on spracuje ziadosti ale vymazala by som ze odoslat na mail lebo to aj tak nefunguje, ale dala by som ze pripravene na vydaj alebo vydane a user to musi potvrdit na svojej strane dakym tlacitkom tam mu vybehne ako ako v eshope daky textik ze suhlasi s pravidlami tukne ano suhlasi a hotovo,
+admin:
+
+Technika
+-pridanie zaradenia: funguje vsetko ok, mo
+-editovanie nefunguje, zmazanie nefunguje, ked nie je pouzivane a ma po zaruke moze ist prec, ked je v nedostupnych zariadeniach sa neda mazat
+-mazanie typov nejde, osetrit iba vtedy ked nepouziva sa a mozno tam pridat editovanie ze ked a pomylis v nazve
+-objednavky funguju dobre, mozno pri pridani pridat tlacitko ze zaruka a tam si vies vybrat kolko rokov? a sam vyrata koniec zaruky? hard math? ak nie tak pridat tam datum koniec zaruky ako je datum prijatia
+-k znackam tiez pridat editovat a mazat ako vsade mazanie len ked sa nepouziva
+
